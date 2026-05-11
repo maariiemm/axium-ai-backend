@@ -1,0 +1,16 @@
+[{
+        "start": "2026-03-10",
+        "end": "2026-03-21",
+        "name": "March Break"
+    },
+    {
+        "start": "2026-06-28",
+        "end": "2026-09-01",
+        "name": "Summer Break"
+    },
+    {
+        "start": "2026-12-21",
+        "end": "2027-01-05",
+        "name": "Winter Break"
+    }
+]

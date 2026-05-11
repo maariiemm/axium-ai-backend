@@ -1,0 +1,42 @@
+[{
+        "start": "2026-01-02",
+        "end": "2026-01-15",
+        "type": "winter_sales"
+    },
+
+    {
+        "start": "2026-03-20",
+        "end": "2026-03-31",
+        "type": "spring_sales"
+    },
+
+    {
+        "start": "2026-06-20",
+        "end": "2026-07-10",
+        "type": "summer_sales"
+    },
+
+    {
+        "start": "2026-08-20",
+        "end": "2026-09-10",
+        "type": "back_to_school"
+    },
+
+    {
+        "start": "2026-11-24",
+        "end": "2026-12-02",
+        "type": "black_friday"
+    },
+
+    {
+        "start": "2026-12-15",
+        "end": "2026-12-24",
+        "type": "christmas_shopping"
+    },
+
+    {
+        "start": "2026-12-26",
+        "end": "2026-12-31",
+        "type": "boxing_week"
+    }
+]
