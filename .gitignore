@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+DataTrain/
+DataTest/
+DataPredict/
+*.db
+transactions.csv
+transaction_signals.csv
+settlements.csv
