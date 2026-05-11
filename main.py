@@ -69,7 +69,7 @@ app = FastAPI(
 # ═════════════════════════════════════
 
 class ProphetPredictionRequest(BaseModel):
-    days: int = Field(default=7, ge=1, le=10)
+    days: int = Field(default=7, ge=1, le=30)
     latitude: float = Field(default=45.5017)     # Montreal default
     longitude: float = Field(default=-73.5673)   # Montreal default
 
