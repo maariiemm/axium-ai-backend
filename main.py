@@ -276,33 +276,7 @@ def predict_prophet(request: ProphetPredictionRequest):
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
         )
-        # ═════════════════════════════════════
-        # FRAUD DETECTION ROUTE
-        # ═════════════════════════════════════
-
-        @app.post("/predict/prophet", response_model=ProphetPredictionResponse)
-def predict_prophet(request: ProphetPredictionRequest):
-    try:
-        future = build_future_dataframe(
-            days=request.days,
-            latitude=request.latitude,
-            longitude=request.longitude
-        )
-
-        predictions = make_predictions(future)
-
-        return {
-            "days": request.days,
-            "latitude": request.latitude,
-            "longitude": request.longitude,
-            "predictions": predictions
-        }
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Prediction failed: {str(e)}"
-        )
+        
 
 
 @app.post("/fraud/detect", response_model=FraudDetectionResponse)
