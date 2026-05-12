@@ -280,25 +280,39 @@ def predict_prophet(request: ProphetPredictionRequest):
         # FRAUD DETECTION ROUTE
         # ═════════════════════════════════════
 
-        @app.post(
-            "/fraud/detect",
-            response_model=FraudDetectionResponse
+        @app.post("/predict/prophet", response_model=ProphetPredictionResponse)
+def predict_prophet(request: ProphetPredictionRequest):
+    try:
+        future = build_future_dataframe(
+            days=request.days,
+            latitude=request.latitude,
+            longitude=request.longitude
         )
-        def fraud_detection(
-            request: FraudDetectionRequest
-        ):
 
-            try:
+        predictions = make_predictions(future)
 
-                result = detect_fraud(
-                    request.dict()
-                )
+        return {
+            "days": request.days,
+            "latitude": request.latitude,
+            "longitude": request.longitude,
+            "predictions": predictions
+        }
 
-                return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction failed: {str(e)}"
+        )
 
-            except Exception as e:
 
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Fraud detection failed: {str(e)}"
-                )
+@app.post("/fraud/detect", response_model=FraudDetectionResponse)
+def fraud_detection(request: FraudDetectionRequest):
+    try:
+        result = detect_fraud(request.dict())
+        return result
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Fraud detection failed: {str(e)}"
+        )
