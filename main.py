@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import date, timedelta
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-
+from services.fraud_detection_service import detect_fraud
 from services.regressor_builder import build_regressors
 
 
@@ -102,6 +102,42 @@ class ProphetPredictionResponse(BaseModel):
     longitude: float
     predictions: list[ProphetPredictionItem]
 
+# ═════════════════════════════════════
+# FRAUD DETECTION MODELS
+# ═════════════════════════════════════
+
+class FraudDetectionRequest(BaseModel):
+
+    nb_transactions: int
+
+    montant_moyen: float
+
+    montant_max: float
+
+    montant_std: float
+
+    taux_echec: float
+
+    taux_erreur_nonfatal: float
+
+    taux_annulation: float
+
+    hour: int
+
+    day_of_week: int
+
+    is_weekend: int
+
+
+class FraudDetectionResponse(BaseModel):
+
+    is_anomaly: bool
+
+    anomaly_score: float
+
+    risk_level: str
+
+    reason: str
 
 # ═════════════════════════════════════
 # HELPERS
@@ -240,3 +276,29 @@ def predict_prophet(request: ProphetPredictionRequest):
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
         )
+        # ═════════════════════════════════════
+        # FRAUD DETECTION ROUTE
+        # ═════════════════════════════════════
+
+        @app.post(
+            "/fraud/detect",
+            response_model=FraudDetectionResponse
+        )
+        def fraud_detection(
+            request: FraudDetectionRequest
+        ):
+
+            try:
+
+                result = detect_fraud(
+                    request.dict()
+                )
+
+                return result
+
+            except Exception as e:
+
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Fraud detection failed: {str(e)}"
+                )

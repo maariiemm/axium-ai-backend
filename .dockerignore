@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+DataTrain/
+DataTest/
+DataPredict/
+axium_synthetic.db
+transactions.csv
+transaction_signals.csv
+settlements.csv

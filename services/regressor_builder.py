@@ -33,11 +33,6 @@ def build_regressors(
         latitude=latitude,
         longitude=longitude
     )
-    regressors["weather_source"] = weather_features.get("weather_source", "unknown")
-    regressors["temperature_min"] = weather_features.get("temperature_min")
-    regressors["temperature_max"] = weather_features.get("temperature_max")
-    regressors["snowfall"] = weather_features.get("snowfall")
-    regressors["precipitation"] = weather_features.get("precipitation")
 
     regressors["is_extreme_cold"] = weather_features["is_extreme_cold"]
     regressors["is_snowstorm"] = weather_features["is_snowstorm"]
