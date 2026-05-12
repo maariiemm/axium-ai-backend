@@ -53,11 +53,16 @@ def get_weather_features(
     snowfall = daily["snowfall_sum"][0]
     precipitation = daily["precipitation_sum"][0]
 
-    is_extreme_cold = 1 if temp_min <= -15 else 0
+    temp_min_safe = temp_min if temp_min is not None else 99
+    temp_max_safe = temp_max if temp_max is not None else 99
+    snowfall_safe = snowfall if snowfall is not None else 0
+    precipitation_safe = precipitation if precipitation is not None else 0
+
+    is_extreme_cold = 1 if temp_min_safe <= -15 else 0
 
     is_snowstorm = 1 if (
-        snowfall >= 5 or
-        (temp_max <= 2 and precipitation >= 10)
+        snowfall_safe >= 5 or
+        (temp_max_safe <= 2 and precipitation_safe >= 10)
     ) else 0
 
     return {
