@@ -120,7 +120,7 @@ def build_future_dataframe(
     today = date.today()
     rows = []
 
-    for i in range(0, days ):
+    for i in range(0, days + 1):
         target_date = today + timedelta(days=i)
 
         all_features = build_regressors(
