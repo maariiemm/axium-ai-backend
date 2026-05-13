@@ -26,55 +26,7 @@ feature_stats = joblib.load(STATS_PATH)
 # FEATURES
 # =========================
 
-FEATURE_COLUMNS = [
-    "nb_transactions",
-    "montant_moyen",
-    "montant_max",
-    "montant_min",
-    "montant_std",
-    "montant_total",
-    "nb_approved",
-    "nb_declined",
-    "nb_signals",
-    "nb_nonfatal",
-    "nb_cancelled",
-    "nb_failed_signal",
-    "nb_declined_signal",
-    "nb_error_52",
-    "nb_error_29",
-    "nb_error_56",
-    "nb_error_events",
-    "nb_error_10",
-    "nb_error_8",
-    "real_error_rate",
-    "timeout_rate",
-    "cancel_error_rate",
-    "card_mismatch_rate",
-    "retry_error_rate",
-    "magnetic_read_error_rate",
-    "approval_rate",
-    "taux_echec",
-    "taux_erreur_nonfatal",
-    "taux_annulation",
-    "failed_signal_rate",
-    "refund_rate",
-    "void_rate",
-    "preauth_rate",
-    "chip_rate",
-    "contactless_rate",
-    "swipe_rate",
-    "manual_rate",
-    "unique_cards",
-    "unique_cards_ratio",
-    "error_to_success_ratio",
-    "recovery_proxy",
-    "nonfatal_per_signal",
-    "is_low_volume",
-    "hour",
-    "day_of_week",
-    "is_weekend",
-    "month",
-]
+FEATURE_COLUMNS = list(scaler.feature_names_in_)
 
 FEATURE_LABELS = {
     "nb_transactions": "transaction volume",
@@ -226,7 +178,11 @@ def detect_fraud(features: dict):
     features = complete_missing_features(features)
 
     df = pd.DataFrame([features])
-    X = df[FEATURE_COLUMNS]
+
+    X = df.reindex(
+        columns=FEATURE_COLUMNS,
+        fill_value=0
+    )
 
     X_scaled = scaler.transform(X)
 
