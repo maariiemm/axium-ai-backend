@@ -175,7 +175,19 @@ def detect_fraud(features: dict):
             "risk_level": get_level(context_score),
             "reason": ", ".join(explain_context(enriched)),
         }
+        # =====================================
+    # IMPORTANT:
+    # No transactions = no behavior analysis
+    # =====================================
 
+    if enriched["nb_transactions"] == 0:
+        return {
+            "is_anomaly": False,
+            "stage": "normal",
+            "anomaly_score": context_score,
+            "risk_level": "LOW",
+            "reason": "No transaction activity detected"
+        }
     x_behavior = pd.DataFrame([enriched])
     x_behavior = x_behavior.reindex(columns=behavior_features, fill_value=0)
 
