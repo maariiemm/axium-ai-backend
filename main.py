@@ -107,73 +107,34 @@ class ProphetPredictionResponse(BaseModel):
 # ═════════════════════════════════════
 
 class FraudDetectionRequest(BaseModel):
-    
-    nb_transactions: int = 0
+    hour: int = 0
+    day_of_week: int = 0
+    month: int = 0
+    is_weekend: int = 0
 
-    montant_moyen: float = 0
-    montant_max: float = 0
-    montant_min: float = 0
-    montant_std: float = 0
-    montant_total: float = 0
+    nb_transactions: int = 0
+    nb_sale: int = 0
+    nb_refund: int = 0
+    nb_void: int = 0
 
     nb_approved: int = 0
     nb_declined: int = 0
-    nb_signals: int = 0
-    nb_nonfatal: int = 0
     nb_cancelled: int = 0
-    nb_failed_signal: int = 0
-    nb_declined_signal: int = 0
+    nb_timed_out: int = 0
+    nb_nonfatal_error: int = 0
 
-    nb_error_52: int = 0
-    nb_error_29: int = 0
-    nb_error_56: int = 0
-    nb_error_events: int = 0
-    nb_error_10: int = 0
-    nb_error_8: int = 0
+    total_amount: float = 0
+    avg_amount: float = 0
+    max_amount: float = 0
+    min_amount: float = 0
+    std_amount: float = 0
 
-    real_error_rate: float = 0
-    timeout_rate: float = 0
-    cancel_error_rate: float = 0
-    card_mismatch_rate: float = 0
-    retry_error_rate: float = 0
-    magnetic_read_error_rate: float = 0
-
-    approval_rate: float = 0
-    taux_echec: float = 0
-    taux_erreur_nonfatal: float = 0
-    taux_annulation: float = 0
-    failed_signal_rate: float = 0
-
-    refund_rate: float = 0
-    void_rate: float = 0
-    preauth_rate: float = 0
-
-    chip_rate: float = 0
-    contactless_rate: float = 0
-    swipe_rate: float = 0
-    manual_rate: float = 0
-
-    unique_cards: int = 0
-    unique_cards_ratio: float = 0
-
-    error_to_success_ratio: float = 0
-    recovery_proxy: int = 0
-    nonfatal_per_signal: float = 0
-    is_low_volume: int = 0
-
-    hour: int = 0
-    day_of_week: int = 0
-    is_weekend: int = 0
-    month: int = 0
 
 class FraudDetectionResponse(BaseModel):
-
     is_anomaly: bool
-
+    stage: str
     anomaly_score: float
-
     risk_level: str
-
     reason: str
 
 # ═════════════════════════════════════
