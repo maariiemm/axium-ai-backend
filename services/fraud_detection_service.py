@@ -84,15 +84,29 @@ def enrich_features(data: dict) -> dict:
     data["decline_rate"] = safe_div(data.get("nb_declined", 0), nb_txn)
     data["refund_rate"] = safe_div(data.get("nb_refund", 0), nb_txn)
     data["void_rate"] = safe_div(data.get("nb_void", 0), nb_txn)
-    data["error_rate"] = safe_div(data.get("nb_nonfatal_error", 0), nb_txn)
+    
     data["timeout_rate"] = safe_div(data.get("nb_timed_out", 0), nb_txn)
     data["cancelled_rate"] = safe_div(data.get("nb_cancelled", 0), nb_txn)
 
-    data["error_to_success_ratio"] = safe_div(
-        data.get("nb_nonfatal_error", 0)
+    # =====================================
+    # Technical events
+    # non_fatal_error is NOT transaction status
+    # =====================================
+
+    data["technical_error_rate"] = safe_div(
+        data.get("nb_nonfatal_error", 0),
+        nb_txn
+    )
+
+    # =====================================
+    # Real transaction failures
+    # =====================================
+
+    data["failure_rate"] = safe_div(
+        data.get("nb_declined", 0)
         + data.get("nb_timed_out", 0)
-        + data.get("nb_declined", 0),
-        nb_approved
+        + data.get("nb_cancelled", 0),
+        nb_txn
     )
 
     data["amount_per_approved_txn"] = safe_div(
@@ -132,8 +146,10 @@ def explain_behavior(data):
     if data["decline_rate"] >= 0.30:
         reasons.append("Decline rate is high compared to normal transaction behavior.")
 
-    if data["error_rate"] >= 0.15:
-        reasons.append("Non-fatal error rate is high compared to normal behavior.")
+    if data["technical_error_rate"] >= 0.15:
+        reasons.append(
+        "High technical non-fatal event rate detected during transactions."
+    )
 
     if data["timeout_rate"] >= 0.10:
         reasons.append("Timeout rate is high compared to normal behavior.")
@@ -141,8 +157,10 @@ def explain_behavior(data):
     if data["cancelled_rate"] >= 0.10:
         reasons.append("Cancelled transaction rate is high compared to normal behavior.")
 
-    if data["error_to_success_ratio"] >= 0.40:
-        reasons.append("Error-to-success ratio is higher than expected.")
+    if data["failure_rate"] >= 0.25:
+        reasons.append(
+        "Transaction failure rate is abnormally high."
+    )
 
     if not reasons:
         reasons.append("Behavior model detected an abnormal combination of transaction ratios.")
@@ -175,7 +193,7 @@ def detect_fraud(features: dict):
             "risk_level": get_level(context_score),
             "reason": ", ".join(explain_context(enriched)),
         }
-        # =====================================
+    # =====================================
     # IMPORTANT:
     # No transactions = no behavior analysis
     # =====================================
