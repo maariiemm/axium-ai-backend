@@ -97,7 +97,9 @@ def enrich_features(data: dict) -> dict:
         data.get("nb_nonfatal_error", 0),
         nb_txn
     )
-
+    data["technical_instability_score"] = (
+    data["technical_error_rate"] * data.get("nb_nonfatal_error", 0)
+    )
     # =====================================
     # Real transaction failures
     # =====================================
